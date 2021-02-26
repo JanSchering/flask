@@ -1,10 +1,18 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import Test from "../mdx/test.mdx";
 
-console.log(React);
 console.log("TEST");
 const testComponent = param => {
-  return <div>{param}</div>;
+  return (
+    <div>
+      {param}
+      <Test />
+    </div>
+  );
 };
 
-ReactDOM.render(testComponent("test"), document.getElementById("root"));
+ReactDOM.render(
+  testComponent("test"),
+  document.getElementById("root")
+);

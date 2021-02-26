@@ -10,6 +10,10 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: ["babel-loader", "eslint-loader"]
+      },
+      {
+        test: /\.mdx?$/,
+        use: ["babel-loader", "@mdx-js/loader"]
       }
     ]
   },
