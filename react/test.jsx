@@ -10,6 +10,9 @@ const testComponent = param => {
     <div className={styles.red}>
       {param}
       <Test />
+      <button type="button" class="btn btn-primary">
+        Button
+      </button>
     </div>
   );
 };
