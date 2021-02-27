@@ -1,5 +1,13 @@
 @import "~mdb-ui-kit/css/mdb.min.css";
 
 body {
-  background-color: yellow;
+  background-image: url("../images/nasa_bg.jpg");
+  width: 100%;
+  height: max-content;
+  min-height: 100%;
+  padding: 0rem 0rem 100% 0rem !important;
+  padding-bottom: 0% !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: absolute;
 }
