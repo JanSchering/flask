@@ -4,7 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: {
-    index: path.resolve(__dirname, "react", "test.jsx")
+    index: path.resolve(__dirname, "react", "home.jsx")
   },
   module: {
     rules: [
@@ -60,7 +60,7 @@ module.exports = {
     extensions: ["*", ".js", ".jsx", ".mdx", ".scss"]
   },
   output: {
-    path: path.resolve(__dirname, "app", "static", "reactTest")
+    path: path.resolve(__dirname, "app", "static", "home")
   },
   plugins: [
     new MiniCssExtractPlugin({

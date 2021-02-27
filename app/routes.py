@@ -10,3 +10,8 @@ def index():
 @app.route('/test')
 def test():
     return render_template('reactTest.html')
+
+
+@app.route('/home')
+def home():
+    return render_template('home.html')
