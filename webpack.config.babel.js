@@ -96,4 +96,26 @@ var homeConfig = Object.assign({}, config, {
   }
 });
 
-module.exports = [homeConfig];
+var tronGameConfig = Object.assign({}, config, {
+  entry: {
+    index: path.resolve(
+      __dirname,
+      "react",
+      "pages",
+      "tronGame",
+      "app.jsx"
+    )
+  },
+  output: {
+    path: path.resolve(
+      __dirname,
+      "app",
+      "static",
+      "bundles",
+      "tronFromScratch"
+    ),
+    filename: "bundle.js"
+  }
+});
+
+module.exports = [homeConfig, tronGameConfig];
