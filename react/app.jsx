@@ -13,6 +13,13 @@ export const App = () => {
         <Route exact path="/home">
           <Home />
         </Route>
+        <Route
+          path="/test"
+          component={() => {
+            window.location.href = "https://www.github.com";
+            return null;
+          }}
+        />
       </Switch>
     </BrowserRouter>
   );
