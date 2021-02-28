@@ -3,10 +3,7 @@ const isDevelopment = process.env.NODE_ENV === "development";
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
 
-module.exports = {
-  entry: {
-    index: path.resolve(__dirname, "react", "home.jsx")
-  },
+var config = {
   module: {
     rules: [
       {
@@ -81,9 +78,6 @@ module.exports = {
   resolve: {
     extensions: ["*", ".js", ".jsx", ".mdx", ".scss"]
   },
-  output: {
-    path: path.resolve(__dirname, "app", "static", "home")
-  },
   plugins: [
     new MiniCssExtractPlugin({
       filename: isDevelopment ? "[name].css" : "[name].[hash].css",
@@ -91,3 +85,15 @@ module.exports = {
     })
   ]
 };
+
+var homeConfig = Object.assign({}, config, {
+  entry: {
+    index: path.resolve(__dirname, "react", "app.jsx")
+  },
+  output: {
+    path: path.resolve(__dirname, "app", "static", "bundles", "home"),
+    filename: "bundle.js"
+  }
+});
+
+module.exports = [homeConfig];

@@ -1,4 +1,7 @@
 node_modules/**
 __pycache__/**
 app/__pycache__/**
-app/static/reactTest/**
+app/static/bundles/**
+
+
+!app/static/bundles/*.md
