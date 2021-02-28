@@ -88,7 +88,13 @@ var config = {
 
 var homeConfig = Object.assign({}, config, {
   entry: {
-    index: path.resolve(__dirname, "react", "app.jsx")
+    index: path.resolve(
+      __dirname,
+      "react",
+      "pages",
+      "home",
+      "app.jsx"
+    )
   },
   output: {
     path: path.resolve(__dirname, "app", "static", "bundles", "home"),
