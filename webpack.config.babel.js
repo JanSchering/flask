@@ -2,6 +2,7 @@ const path = require("path");
 const isDevelopment = process.env.NODE_ENV === "development";
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
+const remarkContainer = require("remark-container");
 
 var config = {
   module: {
@@ -13,7 +14,15 @@ var config = {
       },
       {
         test: /\.mdx?$/,
-        use: ["babel-loader", "@mdx-js/loader"]
+        use: [
+          { loader: "babel-loader" },
+          {
+            loader: "@mdx-js/loader",
+            options: {
+              remarkPlugins: [remarkContainer]
+            }
+          }
+        ]
       },
       {
         test: /\.module\.s(a|c)ss$/,
