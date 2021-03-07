@@ -2,7 +2,7 @@ const path = require("path");
 const isDevelopment = process.env.NODE_ENV === "development";
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
-const remarkContainer = require("remark-container");
+const remarkContainers = require("remark-containers");
 
 var config = {
   module: {
@@ -19,7 +19,7 @@ var config = {
           {
             loader: "@mdx-js/loader",
             options: {
-              remarkPlugins: [remarkContainer]
+              remarkPlugins: [remarkContainers]
             }
           }
         ]
