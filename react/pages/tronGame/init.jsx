@@ -32,10 +32,6 @@ export async function init() {
     document
       .getElementById("submit")
       .addEventListener("click", () => {
-        // GET CANVAS AND INITIALIZE
-        const canvas = document.getElementById("testCanvas");
-        this.ctx = canvas.getContext("2d");
-
         // ENRICH PLAYER OBJECTS WITH FORM DATA
         this.player1.name = document.getElementById("name_1").value;
         this.player2.name = document.getElementById("name_2").value;

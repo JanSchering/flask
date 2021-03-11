@@ -3,7 +3,7 @@ const SETUP = `<div class="setup">
   <p>Enter Names and choose color:</p>
   <div class="player" id="p1Setup">
     <label>Player 1</label>
-    <input type="text" id="name_1"> 
+    <input type="text" id="name_1">
   </div>
   <br />
   <div class="player" id="p2Setup">
@@ -43,22 +43,30 @@ const COLORS = {
   red: "#ff0000",
   blue: "#0066ff",
   green: "#33cc33",
-  yellow: "#ffff00",
+  yellow: "#ffff00"
 };
 
-// INIT LITERALS AND VARIABLES
+/**
+ * {string} intervalID: This ID will be used by the intervalTimer to
+ * recreate the game loop after an Environment change.
+ * TODO: can we get rid of this and simply mutate the attributes?
+ * {HTMLCanvasObject} ctx: A reference to the Canvas on which the game runs.
+ * Used to draw and to get the current state of the board as Array.
+ * {function} onTimerTick: The game loop.
+ * {object} player1, player2: The objects saving the current state of the players.
+ *
+ */
 const GAME = {
   intervalID: undefined,
-  ctx: undefined,
-  playerInfo: {},
+  ctx: document.getElementById("testCanvas").getContext("2d"),
   onTimerTick: undefined,
-  scores: undefined,
   player1: {
     name: undefined,
     x_pos: STARTING_COORD,
     y_pos: STARTING_COORD,
     direction: NONE,
     color: "red",
+    score: 0
   },
   player2: {
     name: undefined,
@@ -66,7 +74,8 @@ const GAME = {
     y_pos: STARTING_COORD * 2,
     direction: NONE,
     color: "blue",
-  },
+    score: 0
+  }
 };
 
 export {
@@ -81,5 +90,5 @@ export {
   LEFT,
   RIGHT,
   NONE,
-  COLORS,
+  COLORS
 };
