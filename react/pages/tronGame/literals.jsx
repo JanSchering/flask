@@ -1,3 +1,5 @@
+import { onTimerTick } from "./utils";
+
 //TEMPLATE FOR THE SETUP-FORM
 const SETUP = `<div class="setup">
   <p>Enter Names and choose color:</p>
@@ -59,7 +61,7 @@ const COLORS = {
 const GAME = {
   intervalID: undefined,
   ctx: document.getElementById("testCanvas").getContext("2d"),
-  onTimerTick: undefined,
+  onTimerTick,
   player1: {
     name: undefined,
     x_pos: STARTING_COORD,
