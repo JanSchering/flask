@@ -1,3 +1,6 @@
+//import * as tf from "@tensorflow/tfjs";
+//import * as tfvis from "@tensorflow/tfjs-vis";
+
 /**
  * Convert the input data to tensors that we can use for machine
  * learning. We will also do the important best practices of _shuffling_
@@ -65,4 +68,38 @@ export async function trainModel(model, inputs, labels) {
       { height: 200, callbacks: ["onEpochEnd"] }
     )
   });
+}
+
+export function createModel() {
+  // Create a sequential model
+  const model = tf.sequential();
+
+  // Add a single input layer
+  model.add(
+    tf.layers.dense({ inputShape: [1], units: 1, useBias: true })
+  );
+
+  // Add an output layer
+  model.add(tf.layers.dense({ units: 1, useBias: true }));
+
+  return model;
+}
+
+/**
+ * Get the car data reduced to just the variables we are interested
+ * and cleaned of missing data.
+ */
+export async function getData() {
+  const carsDataResponse = await fetch(
+    "https://storage.googleapis.com/tfjs-tutorials/carsData.json"
+  );
+  const carsData = await carsDataResponse.json();
+  const cleaned = carsData
+    .map(car => ({
+      mpg: car.Miles_per_Gallon,
+      horsepower: car.Horsepower
+    }))
+    .filter(car => car.mpg != null && car.horsepower != null);
+
+  return cleaned;
 }

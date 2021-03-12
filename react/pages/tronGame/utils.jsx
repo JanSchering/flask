@@ -73,10 +73,16 @@ export function onTimerTick() {
   const p2Alive = isAlive(player2, ctx, p1Color, p2Color);
 
   if (!p1Alive) {
-    window.alert(`${player1.name} Loses`);
+    player2.score += 1;
+    window.alert(`
+      ${player2.name} Wins!
+      current score:
+      ${player1.name}: ${player1.score} - ${player2.name}: ${player2.score}
+      `);
     restart(this.player1, this.player2, intervalID, ctx);
   } else if (!p2Alive) {
-    window.alert(`${player2.name} Loses`);
+    player1.score += 1;
+    window.alert(`${player1.name} Wins!`);
     restart(this.player1, this.player2, intervalID, ctx);
   } else {
     ctx.fillStyle = COLORS[player1.color];
