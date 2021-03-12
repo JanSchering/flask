@@ -10,5 +10,8 @@ def index():
 
 @app.route('/tron')
 def tron():
-    print("CALLED")
     return render_template('tronGame.html')
+
+@app.route('/tfTraining')
+def tfTraining():
+    return render_template('tfTraining.html')

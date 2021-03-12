@@ -133,4 +133,26 @@ var tronGameConfig = Object.assign({}, config, {
   }
 });
 
-module.exports = [homeConfig, tronGameConfig];
+var tfTrainingConfig = Object.assign({}, config, {
+  entry: {
+    index: path.resolve(
+      __dirname,
+      "react",
+      "pages",
+      "tfTraining",
+      "app.jsx"
+    )
+  },
+  output: {
+    path: path.resolve(
+      __dirname,
+      "app",
+      "static",
+      "bundles",
+      "tfTraining"
+    ),
+    filename: "bundle.js"
+  }
+});
+
+module.exports = [homeConfig, tronGameConfig, tfTrainingConfig];
