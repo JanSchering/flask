@@ -1,6 +1,5 @@
 import { SETUP, COLORS } from "./literals";
-import { createColorPicker } from "./utils";
-import { colorPickerListener } from "./listeners";
+import { ColorPicker } from "./colorPicker.js";
 
 /**
  * @description INIT-Function: Creates a Form where players can make their choices.
@@ -17,49 +16,29 @@ export async function init() {
     // APPEND INITIAL FORM TO DOM
     document.querySelector("body").appendChild(form);
 
-    // Inititalize the ColorPickerListener
-    const pickerListener = colorPickerListener();
-
     // Set up a ColorPicker for each player
-    const picker1 = createColorPicker("picker1", "red");
-    pickerListener.bind(this.player1)(picker1);
-    document.getElementById("p1Setup").appendChild(picker1);
-    const picker2 = createColorPicker("picker2", "blue");
-    pickerListener.bind(this.player2)(picker2);
-    document.getElementById("p2Setup").appendChild(picker2);
+    const picker1 = new ColorPicker("red");
+    document.getElementById("p1Setup").appendChild(picker1.domNode);
+    const picker2 = new ColorPicker("blue");
+    document.getElementById("p2Setup").appendChild(picker2.domNode);
 
-    // Attach Listener to the submit button
+    // Attach Listener to the submit button,
+    // resolve promise with responses on submit
     document
       .getElementById("submit")
       .addEventListener("click", () => {
-        // ENRICH PLAYER OBJECTS WITH FORM DATA
-        this.player1.name = document.getElementById("name_1").value;
-        this.player2.name = document.getElementById("name_2").value;
-        document.getElementById(
-          "player1"
-        ).textContent = this.player1.name;
-        document.getElementById(
-          "player2"
-        ).textContent = this.player2.name;
-
+        const p1Name = document.getElementById("name_1").value;
+        const p2Name = document.getElementById("name_2").value;
+        const p1Color = picker1.getColor();
+        const p2Color = picker2.getColor();
         form.parentNode.removeChild(form);
 
-        //INITIAL FILLING OF THE CANVAS WITH THE STARTING POSITIONS
-        this.ctx.fillStyle = COLORS[this.player1.color];
-        this.ctx.fillRect(
-          this.player1.x_pos,
-          this.player1.y_pos,
-          5,
-          5
-        );
-        this.ctx.fillStyle = COLORS[this.player2.color];
-        this.ctx.fillRect(
-          this.player2.x_pos,
-          this.player2.y_pos,
-          5,
-          5
-        );
-        resolve();
+        resolve({
+          p1Name,
+          p1Color,
+          p2Name,
+          p2Color
+        });
       });
   });
   return responses;
