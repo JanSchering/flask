@@ -27,7 +27,7 @@ export class Environment {
 
     if (!this.player1.isAlive(this.ctx, COLORS[this.player2.color])) {
       this.player2.score += 1;
-      this.scoreBoard.updatep1Score(this.player2.score);
+      this.scoreBoard.updatep2Score(this.player2.score);
       window.alert(`
         ${this.player2.name} Wins!
         current score:
@@ -37,9 +37,9 @@ export class Environment {
     } else if (
       !this.player2.isAlive(this.ctx, COLORS[this.player1.color])
     ) {
-      this.player2.score += 1;
-      this.scoreBoard.updatep2Score(this.player2.score);
-      window.alert(`${player1.name} Wins!`);
+      this.player1.score += 1;
+      this.scoreBoard.updatep1Score(this.player1.score);
+      window.alert(`${this.player1.name} Wins!`);
       this.restart();
     } else {
       this.renderPlayer(this.player1);
