@@ -1,4 +1,9 @@
-import { DIRECTIONS, CANVAS_WIDTH, CANVAS_HEIGHT } from "./literals";
+import {
+  DIRECTIONS,
+  CANVAS_WIDTH,
+  CANVAS_HEIGHT,
+  COLORS
+} from "./literals";
 import { getColorCode } from "./utils";
 
 export class Player {
@@ -54,7 +59,7 @@ export class Player {
       );
 
       return (
-        !(hex === this.color) &&
+        !(hex === COLORS[this.color]) &&
         !(hex === enemyColor) &&
         this.x_pos >= 0 &&
         this.x_pos < CANVAS_WIDTH &&
