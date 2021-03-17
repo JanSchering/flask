@@ -133,6 +133,29 @@ var tronGameConfig = Object.assign({}, config, {
   }
 });
 
+var tronAIConfig = Object.assign({}, config, {
+  entry: {
+    index: path.resolve(
+      __dirname,
+      "react",
+      "pages",
+      "tronGame",
+      "AI",
+      "app.js"
+    )
+  },
+  output: {
+    path: path.resolve(
+      __dirname,
+      "app",
+      "static",
+      "bundles",
+      "tronAI"
+    ),
+    filename: "bundle.js"
+  }
+});
+
 var tfTrainingConfig = Object.assign({}, config, {
   entry: {
     index: path.resolve(
@@ -155,4 +178,9 @@ var tfTrainingConfig = Object.assign({}, config, {
   }
 });
 
-module.exports = [homeConfig, tronGameConfig, tfTrainingConfig];
+module.exports = [
+  homeConfig,
+  tronGameConfig,
+  tfTrainingConfig,
+  tronAIConfig
+];

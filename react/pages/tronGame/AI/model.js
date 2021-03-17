@@ -1,4 +1,4 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../utils";
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../literals";
 
 export class Model {
   constructor(batchSize) {
@@ -22,8 +22,11 @@ export class Model {
   chooseAction(state, eps) {
     return tf.tidy(() => {
       const logits = this.network.predict(state);
+      console.log("Predictions: ", logits);
       const sigmoid = tf.sigmoid(logits);
+      console.log("Sigmoid result of the logits: ", sigmoid);
       const probs = tf.div(sigmoid, tf.sum(sigmoid));
+      console.log("The probabilities: ", probs);
       return tf.multinomial(probs, 1).dataSync()[0];
     });
   }
@@ -40,7 +43,7 @@ export class Model {
     // the convolution operation that takes place in this layer.
     this.network.add(
       tf.layers.conv2d({
-        inputShape: [IMAGE_WIDTH, IMAGE_HEIGHT, IMAGE_CHANNELS],
+        inputShape: [IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS],
         kernelSize: 5,
         filters: 8,
         strides: 1,

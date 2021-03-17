@@ -15,3 +15,7 @@ def tron():
 @app.route('/tfTraining')
 def tfTraining():
     return render_template('tfTraining.html')
+
+@app.route('/tronai')
+def tronAI():
+    return render_template('tronAI.html')

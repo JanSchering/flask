@@ -1,4 +1,4 @@
-import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../utils";
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../literals";
 
 export class UI {
   constructor() {

@@ -20,7 +20,12 @@ export class Orchestrator {
     this.surface = new UI();
     this.p1 = new Player("red", "player1", X_START, Y_START);
     this.p2 = new Player("blue", "player2", X_START, Y_START * 2);
-    this.env = new Environment(p1, p2, this.surface.gameBoard);
+    this.env = new Environment(
+      this.p1,
+      this.p2,
+      this.surface.gameBoard,
+      false
+    );
     this.memory = memory;
     this.p1Model = p1Model;
     this.p2Model = p2Model;
@@ -76,7 +81,7 @@ export class Orchestrator {
 
       this.memory.addSample([
         state,
-        action,
+        [p1Action, p2Action],
         [p1Reward, p2Reward],
         nextState
       ]);

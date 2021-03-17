@@ -9,12 +9,14 @@ import {
 import { ScoreBoard } from "./scoreBoard.js";
 
 export class Environment {
-  constructor(player1, player2, canvas) {
+  constructor(player1, player2, canvas, withScoreBoard) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.player1 = player1;
     this.player2 = player2;
-    this.scoreBoard = new ScoreBoard(player1.name, player2.name);
+    this.scoreBoard = withScoreBoard
+      ? new ScoreBoard(player1.name, player2.name)
+      : {};
     this.renderPlayer(player1);
     this.renderPlayer(player2);
 
@@ -23,6 +25,7 @@ export class Environment {
   }
 
   step() {
+    console.log("Moving the players", this.player1, this.player2);
     this.player1.movePlayer();
     this.player2.movePlayer();
 
@@ -55,61 +58,44 @@ export class Environment {
         CANVAS_WIDTH,
         CANVAS_HEIGHT
       ).data;
-      //The original array has an additional alpha channel that we don't need
-      //for the learning -> remove the alpha entries
-      //Generally, we also don't need to have rgb values, all we care about is
-      //if a pixel is blocked or not
-      //We can also immediately clip the values to true and false (blocked/!blocked)
-      const rgbData = imageData.filter((val, idx) => idx % 4 !== 3);
+      console.log("IMAGE DATA", imageData);
 
+      const downScaled = new Array();
       const red = [];
       const green = [];
       const blue = [];
-
-      imageData.map((channel, idx) => {
+      imageData.forEach((channel, idx) => {
         switch (idx % 4) {
           case 0:
-            red.push(channel > 0);
+            red.push(channel > 0 ? 1 : 0);
             break;
           case 1:
-            green.push(channel > 0);
+            green.push(channel > 0 ? 1 : 0);
             break;
           case 2:
-            blue.push(channel > 0);
+            blue.push(channel > 0 ? 1 : 0);
             break;
           default:
             break;
         }
-
-        // Now we have 3 buckets (red, green and blue), each of size
-        // CANVAS_WIDTH * CANVAS_HEIGHT with indicators.
-        // We can combine the three buckets
-        // as we need a Matrix for CNN, we combine them into
-        // a matrix of size [CANVAS_HEIGHT, CANVAS_WIDTH]
-        const imageMatrix = [];
-        for (var i = 0; i < CANVAS_HEIGHT; i++) {
-          const row = [];
-          for (var j = 0; j < CANVAS_WIDTH; j++) {
-            row.push(+(red[i] || green[i] || blue[i])); //NOTE: +true === 1
-          }
-          imageMatrix.push(row);
-        }
-
-        // We can still downsize the input, as each player has a size of
-        // 5x5 px --> instead of checking every pixel, it is enough to know if
-        // the 5x5 patches are blocked
-        const scaledImageMatrix = [];
-        for (var i = 0; i < CANVAS_HEIGHT; i = i + 5) {
-          const row = [];
-          for (var j = 0; j < CANVAS_WIDTH; j = j + 5) {
-            row.push(imageData[i][j]);
-          }
-        }
-
-        return tf
-          .tensor2d(scaledImageMatrix)
-          .reshape([CANVAS_HEIGHT / 5, CANVAS_WIDTH / 5, 1]);
       });
+
+      for (var i = 0; i < CANVAS_HEIGHT; i = i + 5) {
+        for (var j = 0; j < CANVAS_WIDTH; j = j + 5) {
+          const arrayIdx = i * CANVAS_WIDTH + j;
+          downScaled.push(
+            red[arrayIdx] + green[arrayIdx] + blue[arrayIdx] > 0
+              ? 1
+              : 0
+          );
+        }
+      }
+
+      return tf
+        .tensor(downScaled)
+        .reshape([CANVAS_HEIGHT / 5, CANVAS_WIDTH / 5])
+        .expandDims(-1)
+        .expandDims(0);
     });
   }
 }
