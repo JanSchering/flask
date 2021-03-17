@@ -14,6 +14,7 @@ export class Player {
     this.name = name;
     this.direction = DIRECTIONS.NONE;
     this.score = 0;
+    this.alive = true;
   }
 
   /**
@@ -39,11 +40,7 @@ export class Player {
     }
   }
 
-  /**
-   * @description Checks if the player has hit a game ending state.
-   * @returns {boolean} whether the player is alive or not.
-   */
-  isAlive(ctx, enemyColor) {
+  healthCheckup(ctx, enemyColor) {
     const { NONE } = DIRECTIONS;
     if (this.direction !== NONE) {
       const positionLookAhead = ctx.getImageData(
@@ -58,17 +55,24 @@ export class Player {
         positionLookAhead[2]
       );
 
-      return (
+      this.alive =
         !(hex === COLORS[this.color]) &&
         !(hex === enemyColor) &&
         this.x_pos >= 0 &&
         this.x_pos < CANVAS_WIDTH &&
         this.y_pos >= 0 &&
-        this.y_pos < CANVAS_HEIGHT
-      );
+        this.y_pos < CANVAS_HEIGHT;
     } else {
-      return true;
+      this.alive = true;
     }
+  }
+
+  /**
+   * @description Checks if the player has hit a game ending state.
+   * @returns {boolean} whether the player is alive or not.
+   */
+  isAlive() {
+    return this.alive;
   }
 
   setColor(color) {
@@ -83,8 +87,33 @@ export class Player {
     this.direction = direction;
   }
 
+  /**
+   * @description Set direction according to UDLR principle
+   */
+  setDirectionNumeric(numericDirection) {
+    const { UP, DOWN, LEFT, RIGHT } = DIRECTIONS;
+    switch (numericDirection) {
+      case 0:
+        this.direction = UP;
+        break;
+      case 1:
+        this.direction = DOWN;
+        break;
+      case 2:
+        this.direction = LEFT;
+        break;
+      case 3:
+        this.direction = RIGHT;
+        break;
+    }
+  }
+
   getDirection() {
     return this.direction;
+  }
+
+  incrementScore() {
+    this.score++;
   }
 
   setCoords(x_pos, y_pos) {
