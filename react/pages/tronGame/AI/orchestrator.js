@@ -33,7 +33,7 @@ export class Orchestrator {
     // The exploration parameter
     this.eps = MAX_EPSILON;
 
-    // Keep tracking of the elapsed steps
+    // Keep track of the elapsed steps
     this.steps = 0;
     this.maxStepsPerGame = maxStepsPerGame;
 
@@ -49,28 +49,27 @@ export class Orchestrator {
   }
 
   async run() {
-    console.log("orchestrator runs");
     let state = this.env.getStateTensor();
-    console.log("state", state);
     let p1Reward = 0;
     let p2Reward = 0;
     let step = 0;
     while (step < this.maxStepsPerGame) {
+      await buttonInput();
       const p1Action = this.p1Model.chooseAction(state, this.eps);
-      console.log("PLAYER 1 CHOSE: ", p1Action);
       this.env.player1.setDirectionNumeric(p1Action);
 
       const p2Action = this.p2Model.chooseAction(state, this.eps);
-      console.log("PLAYER 2 CHOSE: ", p2Action);
       this.env.player2.setDirectionNumeric(p2Action);
 
       this.env.step();
 
       let done = false;
       if (!this.env.player1.isAlive()) {
+        console.log("PLAYER 1 DIED");
         p2Reward++;
         done = true;
       } else if (!this.env.player2.isAlive()) {
+        console.log("PLAYER 2 DIED");
         p1Reward++;
         done = true;
       }
@@ -97,10 +96,11 @@ export class Orchestrator {
 
       if (done || step == this.maxStepsPerGame) {
         this.rewardStore.push([p1Reward, p2Reward]);
+        this.env.reset();
         break;
       } else {
-        this.env.renderPlayer(env.player1);
-        this.env.renderPlayer(env.player2);
+        this.env.renderPlayer(this.env.player1);
+        this.env.renderPlayer(this.env.player2);
       }
     }
     await this.replay;
@@ -192,3 +192,15 @@ export class Orchestrator {
     p2Label.dispose();
   }
 }
+
+function clickListener() {
+  this.resolve();
+}
+
+const buttonInput = () => {
+  return new Promise(resolve => {
+    const button = document.getElementById("trainButton");
+    button.removeEventListener("click", clickListener);
+    button.addEventListener("click", clickListener.bind({ resolve }));
+  });
+};

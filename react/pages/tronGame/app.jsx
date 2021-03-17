@@ -11,7 +11,7 @@ const Main = async () => {
   const p1 = new Player(p1Color, p1Name, X_START, Y_START);
   const p2 = new Player(p2Color, p2Name, X_START, Y_START * 2);
   const canvas = document.getElementById("testCanvas");
-  const env = new Environment(p1, p2, canvas);
+  const env = new Environment(p1, p2, canvas, true);
 
   setInterval(() => {
     env.step();

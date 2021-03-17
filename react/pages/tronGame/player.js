@@ -41,6 +41,7 @@ export class Player {
   }
 
   healthCheckup(ctx, enemyColor) {
+    console.log("CURRENT PLAYER POSITION: ", this.x_pos, this.y_pos);
     const { NONE } = DIRECTIONS;
     if (this.direction !== NONE) {
       const positionLookAhead = ctx.getImageData(
@@ -62,6 +63,8 @@ export class Player {
         this.x_pos < CANVAS_WIDTH &&
         this.y_pos >= 0 &&
         this.y_pos < CANVAS_HEIGHT;
+
+      console.log("this player is alive?", this.alive);
     } else {
       this.alive = true;
     }
@@ -94,16 +97,16 @@ export class Player {
     const { UP, DOWN, LEFT, RIGHT } = DIRECTIONS;
     switch (numericDirection) {
       case 0:
-        this.direction = UP;
+        if (this.direction !== DOWN) this.direction = UP;
         break;
       case 1:
-        this.direction = DOWN;
+        if (this.direction !== UP) this.direction = DOWN;
         break;
       case 2:
-        this.direction = LEFT;
+        if (this.direction !== RIGHT) this.direction = LEFT;
         break;
       case 3:
-        this.direction = RIGHT;
+        if (this.direction !== LEFT) this.direction = RIGHT;
         break;
     }
   }

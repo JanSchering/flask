@@ -22,11 +22,8 @@ export class Model {
   chooseAction(state, eps) {
     return tf.tidy(() => {
       const logits = this.network.predict(state);
-      console.log("Predictions: ", logits);
       const sigmoid = tf.sigmoid(logits);
-      console.log("Sigmoid result of the logits: ", sigmoid);
       const probs = tf.div(sigmoid, tf.sum(sigmoid));
-      console.log("The probabilities: ", probs);
       return tf.multinomial(probs, 1).dataSync()[0];
     });
   }

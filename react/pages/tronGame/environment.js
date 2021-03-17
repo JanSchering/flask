@@ -25,7 +25,6 @@ export class Environment {
   }
 
   step() {
-    console.log("Moving the players", this.player1, this.player2);
     this.player1.movePlayer();
     this.player2.movePlayer();
 
@@ -40,7 +39,6 @@ export class Environment {
 
   reset(player1, player2, intervalID, ctx) {
     const { NONE } = DIRECTIONS;
-    console.log("restart called");
     this.player1.setDirection(NONE);
     this.player2.setDirection(NONE);
     this.ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
@@ -58,7 +56,6 @@ export class Environment {
         CANVAS_WIDTH,
         CANVAS_HEIGHT
       ).data;
-      console.log("IMAGE DATA", imageData);
 
       const downScaled = new Array();
       const red = [];

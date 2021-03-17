@@ -20,14 +20,14 @@ class PolicyNetwork {
     numGames = 100,
     maxStepsPerGame = 500
   ) {
+    const orchestrator = new Orchestrator(
+      this.p1Model,
+      this.p2Model,
+      this.memory,
+      discountRate,
+      maxStepsPerGame
+    );
     for (let i = 0; i < numGames; ++i) {
-      const orchestrator = new Orchestrator(
-        this.p1Model,
-        this.p2Model,
-        this.memory,
-        discountRate,
-        maxStepsPerGame
-      );
       await orchestrator.run();
     }
   }
