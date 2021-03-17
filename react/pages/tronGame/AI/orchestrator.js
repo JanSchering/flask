@@ -99,8 +99,8 @@ export class Orchestrator {
         this.rewardStore.push([p1Reward, p2Reward]);
         break;
       } else {
-        env.renderPlayer(env.player1);
-        env.renderPlayer(env.player2);
+        this.env.renderPlayer(env.player1);
+        this.env.renderPlayer(env.player2);
       }
     }
     await this.replay;
