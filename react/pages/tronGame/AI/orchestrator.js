@@ -53,8 +53,8 @@ export class Orchestrator {
     let p1Reward = 0;
     let p2Reward = 0;
     let step = 0;
-    while (step < this.maxStepsPerGame) {
-      await buttonInput();
+    await buttonInput();
+    var handler = setInterval(() => {
       const p1Action = this.p1Model.chooseAction(state, this.eps);
       this.env.player1.setDirectionNumeric(p1Action);
 
@@ -97,12 +97,12 @@ export class Orchestrator {
       if (done || step == this.maxStepsPerGame) {
         this.rewardStore.push([p1Reward, p2Reward]);
         this.env.reset();
-        break;
+        clearInterval(handler);
       } else {
         this.env.renderPlayer(this.env.player1);
         this.env.renderPlayer(this.env.player2);
       }
-    }
+    }, 33);
     await this.replay;
   }
 
