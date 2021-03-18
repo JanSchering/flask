@@ -33,5 +33,22 @@ class PolicyNetwork {
   }
 }
 
-const net = new PolicyNetwork();
-net.train();
+function clickListener() {
+  this.resolve();
+}
+
+const buttonInput = () => {
+  return new Promise(resolve => {
+    const button = document.getElementById("trainButton");
+    button.removeEventListener("click", clickListener);
+    button.addEventListener("click", clickListener.bind({ resolve }));
+  });
+};
+
+async function runApp() {
+  const net = new PolicyNetwork();
+  await buttonInput();
+  net.train();
+}
+
+runApp();

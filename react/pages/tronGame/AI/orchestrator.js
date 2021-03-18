@@ -53,7 +53,6 @@ export class Orchestrator {
     let p1Reward = 0;
     let p2Reward = 0;
     let step = 0;
-    await buttonInput();
     var handler = setInterval(() => {
       const p1Action = this.p1Model.chooseAction(state, this.eps);
       this.env.player1.setDirectionNumeric(p1Action);
@@ -65,11 +64,9 @@ export class Orchestrator {
 
       let done = false;
       if (!this.env.player1.isAlive()) {
-        console.log("PLAYER 1 DIED");
         p2Reward++;
         done = true;
       } else if (!this.env.player2.isAlive()) {
-        console.log("PLAYER 2 DIED");
         p1Reward++;
         done = true;
       }
@@ -192,15 +189,3 @@ export class Orchestrator {
     p2Label.dispose();
   }
 }
-
-function clickListener() {
-  this.resolve();
-}
-
-const buttonInput = () => {
-  return new Promise(resolve => {
-    const button = document.getElementById("trainButton");
-    button.removeEventListener("click", clickListener);
-    button.addEventListener("click", clickListener.bind({ resolve }));
-  });
-};

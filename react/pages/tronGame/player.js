@@ -41,7 +41,6 @@ export class Player {
   }
 
   healthCheckup(ctx, enemyColor) {
-    console.log("CURRENT PLAYER POSITION: ", this.x_pos, this.y_pos);
     const { NONE } = DIRECTIONS;
     if (this.direction !== NONE) {
       const positionLookAhead = ctx.getImageData(
@@ -63,8 +62,6 @@ export class Player {
         this.x_pos < CANVAS_WIDTH &&
         this.y_pos >= 0 &&
         this.y_pos < CANVAS_HEIGHT;
-
-      console.log("this player is alive?", this.alive);
     } else {
       this.alive = true;
     }
