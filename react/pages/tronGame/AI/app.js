@@ -1,6 +1,7 @@
 import { Model } from "./model";
 import { Orchestrator } from "./orchestrator";
 import { Memory } from "./memory";
+import { UI } from "./visual.js";
 
 /**
  * The role of the policy network is to select an action based on the observed
@@ -9,7 +10,8 @@ import { Memory } from "./memory";
  * which turn the players' character in the according direction.
  */
 class PolicyNetwork {
-  constructor() {
+  constructor(surface) {
+    this.surface = surface;
     this.memory = new Memory(500);
     this.p1Model = new Model(100);
     this.p2Model = new Model(100);
@@ -17,10 +19,11 @@ class PolicyNetwork {
 
   async train(
     discountRate = 0.95,
-    numGames = 100,
+    numGames = 1000,
     maxStepsPerGame = 500
   ) {
     const orchestrator = new Orchestrator(
+      this.surface,
       this.p1Model,
       this.p2Model,
       this.memory,
@@ -46,7 +49,11 @@ const buttonInput = () => {
 };
 
 async function runApp() {
-  const net = new PolicyNetwork();
+  const tfVisContainer = tfvis
+    .visor()
+    .surface({ name: "Game Board", tab: "Input Data" });
+  const surface = new UI(tfVisContainer);
+  const net = new PolicyNetwork(surface);
   await buttonInput();
   net.train();
 }

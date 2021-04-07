@@ -2,7 +2,6 @@ import { Environment } from "../environment.js";
 import { Player } from "../player.js";
 import { Model } from "./model.js";
 import { Memory } from "./memory.js";
-import { UI } from "./visual.js";
 import { X_START, Y_START } from "../literals";
 
 const MIN_EPSILON = 0.01;
@@ -11,13 +10,14 @@ const LAMBDA = 0.01;
 
 export class Orchestrator {
   constructor(
+    surface,
     p1Model,
     p2Model,
     memory,
     discountRate,
     maxStepsPerGame
   ) {
-    this.surface = new UI();
+    this.surface = surface;
     this.p1 = new Player("red", "player1", X_START, Y_START);
     this.p2 = new Player("blue", "player2", X_START, Y_START * 2);
     this.env = new Environment(

@@ -1,15 +1,14 @@
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../literals";
 
 export class UI {
-  constructor() {
-    this.surface = tfvis
-      .visor()
-      .surface({ name: "Game Board", tab: "Input Data" });
+  constructor(surface) {
+    this.surface = surface;
     this.gameBoard = this.createGameBoard();
     this.learnBoard = this.createLearnBoard();
   }
 
   createGameBoard() {
+    console.log("creating game board");
     const gameCanvas = document.createElement("canvas");
     gameCanvas.width = CANVAS_WIDTH;
     gameCanvas.height = CANVAS_HEIGHT;
