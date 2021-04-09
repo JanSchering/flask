@@ -1,31 +1,17 @@
 import { Environment } from "../environment.js";
 import { Player } from "../player.js";
-import { Model } from "./model.js";
-import { Memory } from "./memory.js";
-import { X_START, Y_START } from "../literals";
+import { CANVAS_HEIGHT, CANVAS_WIDTH, X_START, Y_START } from "../literals";
 
 const MIN_EPSILON = 0.01;
 const MAX_EPSILON = 0.2;
 const LAMBDA = 0.01;
 
 export class Orchestrator {
-  constructor(
-    surface,
-    p1Model,
-    p2Model,
-    memory,
-    discountRate,
-    maxStepsPerGame
-  ) {
-    this.surface = surface;
+  constructor(canvas, p1Model, p2Model, memory, discountRate, maxStepsPerGame) {
+    this.canvas = canvas;
     this.p1 = new Player("red", "player1", X_START, Y_START);
     this.p2 = new Player("blue", "player2", X_START, Y_START * 2);
-    this.env = new Environment(
-      this.p1,
-      this.p2,
-      this.surface.gameBoard,
-      false
-    );
+    this.env = new Environment(this.p1, this.p2, this.canvas, false);
     this.memory = memory;
     this.p1Model = p1Model;
     this.p2Model = p2Model;
@@ -52,6 +38,8 @@ export class Orchestrator {
     let state = this.env.getStateTensor();
     let p1Reward = 0;
     let p2Reward = 0;
+    let logRewardParam = 1; // we want logarithmic growth of the reward
+    let rewardCounter = 1;
     let step = 0;
     var handler = setInterval(() => {
       const p1Action = this.p1Model.chooseAction(state, this.eps);
@@ -64,11 +52,16 @@ export class Orchestrator {
 
       let done = false;
       if (!this.env.player1.isAlive()) {
-        p2Reward++;
+        p1Reward = -p1Reward;
+        p2Reward = logRewardParam * Math.log(rewardCounter);
         done = true;
       } else if (!this.env.player2.isAlive()) {
-        p1Reward++;
+        p2Reward = -p2Reward;
+        p1Reward = logRewardParam * Math.log(rewardCounter);
         done = true;
+      } else {
+        p1Reward = logRewardParam * Math.log(rewardCounter);
+        p2Reward = logRewardParam * Math.log(rewardCounter);
       }
 
       let nextState = this.env.getStateTensor();
@@ -79,7 +72,7 @@ export class Orchestrator {
         state,
         [p1Action, p2Action],
         [p1Reward, p2Reward],
-        nextState
+        nextState,
       ]);
 
       this.steps += 1;
@@ -114,7 +107,7 @@ export class Orchestrator {
     // Predict the values of each action at each state for both players
     const p1Preds = [];
     const p2Preds = [];
-    states.forEach(state => {
+    states.forEach((state) => {
       p1Preds.push(this.p1Model.predict(state));
       p2Preds.push(this.p2Model.predict(state));
     });
@@ -122,7 +115,7 @@ export class Orchestrator {
     // Predict the values of each action at each next state
     const p1FortuneTelling = [];
     const p2FortuneTelling = [];
-    nextStates.forEach(nextState => {
+    nextStates.forEach((nextState) => {
       p1FortuneTelling.push(this.p1Model.predict(nextState));
       p2FortuneTelling.push(this.p2Model.predict(nextState));
     });
@@ -140,12 +133,10 @@ export class Orchestrator {
       if (nextState) {
         current_P1_Q_val =
           reward[0] +
-          this.discountRate *
-            p1FortuneTelling[index].max().dataSync();
+          this.discountRate * p1FortuneTelling[index].max().dataSync();
         current_P2_Q_val =
           reward[1] +
-          this.discountRate *
-            p2FortuneTelling[index].max().dataSync();
+          this.discountRate * p2FortuneTelling[index].max().dataSync();
       } else {
         current_P1_Q_val = reward[0];
         current_P2_Q_val = reward[1];
@@ -157,28 +148,17 @@ export class Orchestrator {
     });
 
     // Clean unused tensors
-    p1Preds.forEach(state => state.dispose());
-    p2Preds.forEach(state => state.dispose());
-    p1FortuneTelling.forEach(state => state.dispose());
-    p2FortuneTelling.forEach(state => state.dispose());
+    p1Preds.forEach((state) => state.dispose());
+    p2Preds.forEach((state) => state.dispose());
+    p1FortuneTelling.forEach((state) => state.dispose());
+    p2FortuneTelling.forEach((state) => state.dispose());
 
     // Reshape the batches to be fed to the network
     x = tf
       .tensor(x)
-      .reshape([
-        this.model.batchSize,
-        CANVAS_HEIGHT / 5,
-        CANVAS_WIDTH / 5,
-        1
-      ]);
-    p1Label = tf.tensor2d(p1Label, [
-      p1Label.length,
-      this.model.numActions
-    ]);
-    p2Label = tf.tensor2d(p2Label, [
-      p2Label.length,
-      this.model.numActions
-    ]);
+      .reshape([this.model.batchSize, CANVAS_HEIGHT * CANVAS_WIDTH]);
+    p1Label = tf.tensor2d(p1Label, [p1Label.length, this.model.numActions]);
+    p2Label = tf.tensor2d(p2Label, [p2Label.length, this.model.numActions]);
 
     // Learn the Q(s, a) values given associated discounted rewards
     await this.p1Model.train(x, p1Label);

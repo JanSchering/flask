@@ -38,7 +38,7 @@ const DIRECTIONS = {
   DOWN: "DOWN",
   LEFT: "LEFT",
   RIGHT: "RIGHT",
-  NONE: "NONE"
+  NONE: "NONE",
 };
 
 //COLORS
@@ -46,7 +46,7 @@ const COLORS = {
   red: "#ff0000",
   blue: "#0066ff",
   green: "#33cc33",
-  yellow: "#ffff00"
+  yellow: "#ffff00",
 };
 
 export {
@@ -57,5 +57,5 @@ export {
   CANVAS_HEIGHT,
   CANVAS_WIDTH,
   DIRECTIONS,
-  COLORS
+  COLORS,
 };

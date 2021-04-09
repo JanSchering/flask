@@ -4,7 +4,7 @@ import {
   Y_START,
   COLORS,
   CANVAS_WIDTH,
-  CANVAS_HEIGHT
+  CANVAS_HEIGHT,
 } from "./literals.js";
 import { ScoreBoard } from "./scoreBoard.js";
 
@@ -50,12 +50,8 @@ export class Environment {
 
   getStateTensor() {
     return tf.tidy(() => {
-      const imageData = this.ctx.getImageData(
-        0,
-        0,
-        CANVAS_WIDTH,
-        CANVAS_HEIGHT
-      ).data;
+      const imageData = this.ctx.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+        .data;
 
       const downScaled = new Array();
       const red = [];
@@ -81,25 +77,21 @@ export class Environment {
         for (var j = 0; j < CANVAS_WIDTH; j = j + 5) {
           const arrayIdx = i * CANVAS_WIDTH + j;
           downScaled.push(
-            red[arrayIdx] + green[arrayIdx] + blue[arrayIdx] > 0
-              ? 1
-              : 0
+            red[arrayIdx] + green[arrayIdx] + blue[arrayIdx] > 0 ? 1 : 0
           );
         }
       }
 
       return tf
         .tensor(downScaled)
-        .reshape([CANVAS_HEIGHT / 5, CANVAS_WIDTH / 5])
-        .expandDims(-1)
-        .expandDims(0);
+        .reshape([1, (CANVAS_HEIGHT / 5) * (CANVAS_WIDTH / 5)]);
     });
   }
 }
 
 async function keydownListener() {
   const { UP, DOWN, LEFT, RIGHT } = DIRECTIONS;
-  document.addEventListener("keydown", event => {
+  document.addEventListener("keydown", (event) => {
     if (event.isComposing || event.keyCode === 229) {
       return;
     }
