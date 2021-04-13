@@ -1,9 +1,4 @@
-import {
-  DIRECTIONS,
-  CANVAS_WIDTH,
-  CANVAS_HEIGHT,
-  COLORS
-} from "./literals";
+import { DIRECTIONS, CANVAS_WIDTH, CANVAS_HEIGHT, COLORS } from "./literals";
 import { getColorCode } from "./utils";
 
 export class Player {
@@ -43,17 +38,14 @@ export class Player {
   healthCheckup(ctx, enemyColor) {
     const { NONE } = DIRECTIONS;
     if (this.direction !== NONE) {
-      const positionLookAhead = ctx.getImageData(
-        this.x_pos,
-        this.y_pos,
-        1,
-        1
-      ).data;
+      const positionLookAhead = ctx.getImageData(this.x_pos, this.y_pos, 1, 1)
+        .data;
       const hex = getColorCode(
         positionLookAhead[0],
         positionLookAhead[1],
         positionLookAhead[2]
       );
+      console.log(this.x_pos, this.y_pos);
 
       this.alive =
         !(hex === COLORS[this.color]) &&
@@ -62,6 +54,7 @@ export class Player {
         this.x_pos < CANVAS_WIDTH &&
         this.y_pos >= 0 &&
         this.y_pos < CANVAS_HEIGHT;
+      console.log(this.alive);
     } else {
       this.alive = true;
     }
